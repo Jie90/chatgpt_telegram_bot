@@ -17,7 +17,7 @@ def get_env(key, default=None):
     return os.environ.get(key) or config_env.get(key, default)
 
 # config parameters
-telegram_token = config_yaml["telegram_token"]
+telegram_token = get_env('TELEGRAM_BOT_TOKEN', config_yaml["telegram_token"])
 openai_api_key = config_yaml["openai_api_key"]
 openai_api_base = config_yaml.get("openai_api_base", None)
 allowed_telegram_usernames = config_yaml["allowed_telegram_usernames"]
