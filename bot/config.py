@@ -1,3 +1,4 @@
+import os
 import yaml
 import dotenv
 from pathlib import Path
@@ -11,6 +12,10 @@ with open(config_dir / "config.yml", 'r') as f:
 # load .env config
 config_env = dotenv.dotenv_values(config_dir / "config.env")
 
+def get_env(key, default=None):
+    # 优先读系统环境变量（Render），其次 config.env 文件（本地开发），最后用默认
+    return os.environ.get(key) or config_env.get(key, default)
+
 # config parameters
 telegram_token = config_yaml["telegram_token"]
 openai_api_key = config_yaml["openai_api_key"]
@@ -21,7 +26,7 @@ enable_message_streaming = config_yaml.get("enable_message_streaming", True)
 return_n_generated_images = config_yaml.get("return_n_generated_images", 1)
 image_size = config_yaml.get("image_size", "512x512")
 n_chat_modes_per_page = config_yaml.get("n_chat_modes_per_page", 5)
-mongodb_uri = f"mongodb://mongo:{config_env['MONGODB_PORT']}"
+mongodb_uri = f"mongodb://mongo:{get_env('MONGODB_PORT')}"
 
 # chat_modes
 with open(config_dir / "chat_modes.yml", 'r') as f:
